@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualizar Estudiante</title>
+</head>
+<body>
+    <nav style="background-color: #f4f4f4; padding: 10px; margin-bottom: 20px;">
+        <a href="models/select.php">Ver Estudiantes</a> | 
+        <a href="post.html">Ingresar</a> | 
+        <a href="update.html">Actualizar</a> | 
+        <a href="delete.html">Eliminar</a>
+    </nav>
+    <h2>Actualizar Estudiante</h2>
+    <form action="models/update.php" method="POST">
+        <label for="cedula">Cédula a actualizar (clave):</label><br>
+        <input type="text" id="cedula" name="cedula" required><br><br>
+
+        <label for="nombre">Nuevo Nombre:</label><br>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+
+        <label for="apellido">Nuevo Apellido:</label><br>
+        <input type="text" id="apellido" name="apellido" required><br><br>
+
+        <label for="telefono">Nuevo Teléfono:</label><br>
+        <input type="text" id="telefono" name="telefono"><br><br>
+
+        <label for="direccion">Nueva Dirección:</label><br>
+        <input type="text" id="direccion" name="direccion"><br><br>
+
+        <input type="submit" value="Actualizar">
+    </form>
+</body>
+</html>

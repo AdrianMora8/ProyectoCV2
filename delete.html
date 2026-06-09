@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminar Estudiante</title>
+</head>
+<body>
+    <nav style="background-color: #f4f4f4; padding: 10px; margin-bottom: 20px;">
+        <a href="models/select.php">Ver Estudiantes</a> | 
+        <a href="post.html">Ingresar</a> | 
+        <a href="update.html">Actualizar</a> | 
+        <a href="delete.html">Eliminar</a>
+    </nav>
+    <h2>Eliminar Estudiante</h2>
+    <form action="models/delete.php" method="POST">
+        <label for="cedula">Cédula del estudiante a eliminar:</label><br><br>
+        <input type="text" id="cedula" name="cedula" required>
+        <br><br>
+        <input type="submit" value="Eliminar">
+    </form>
+</body>
+</html>

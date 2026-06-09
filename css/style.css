@@ -1,0 +1,67 @@
+body
+{
+    background: rgb(232, 235, 235);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+header
+{
+    position: relative;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+}
+nav
+{
+    position: relative;
+    width: 100%;
+    background: rgb(177, 12, 12);
+    text-align: center;
+    padding: 10px;
+}
+ul
+{
+    position: relative;
+    margin: auto;
+    width: 50%;
+    text-align: none;
+}
+li
+{
+    display: inline-block;
+    width: 20%;
+    padding: 10px;
+    color: azure;
+    list-style: none;
+}
+
+nav ul li a
+{
+    color: azure;
+    list-style: none;
+}
+article
+{
+    position: relative;
+    padding: 10px;
+    flex: 1 1 auto;
+}
+footer
+{
+    margin-top: auto;
+    padding: 10px;
+    background: rgb(177, 12, 12);
+    color: azure;
+    text-align: center;
+}
+.styleLetter
+{
+    color: blue;
+    font-size: large;
+}
+
+.active-tab {
+    text-decoration: underline !important;
+    opacity: 0.85;
+}
