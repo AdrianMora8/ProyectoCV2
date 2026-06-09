@@ -199,7 +199,12 @@ if (!$logueado_nosotros):
 <?php endif; ?>
 
 <?php if (!empty($_SESSION['abrir_factura_pdf'])): unset($_SESSION['abrir_factura_pdf']); ?>
-<script>window.open('reportes/factura_pdf.php', '_blank');</script>
+<div class="alert alert-success d-flex justify-content-between align-items-center">
+    <span>¡Compra registrada exitosamente!</span>
+    <a href="reportes/factura_pdf.php" target="_blank" class="btn btn-sm text-white" style="background:rgb(177,12,12);">
+        Ver Factura PDF
+    </a>
+</div>
 <?php endif; ?>
 
 <script src="js/carrito.js"></script>
