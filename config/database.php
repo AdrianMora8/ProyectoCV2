@@ -8,9 +8,13 @@ define('DB_NAME', getenv('DB_NAME') ?: 'cv');
 
 function getConexion()
 {
-    $conexion = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    $port = (int)(getenv('DB_PORT') ?: 3306);
+    $conexion = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME, $port);
     if (!$conexion) {
         die("Error de conexión: " . mysqli_connect_error());
+    }
+    if (getenv('DB_SSL') === 'true') {
+        mysqli_ssl_set($conexion, null, null, null, null, null);
     }
     mysqli_set_charset($conexion, 'utf8');
     return $conexion;
