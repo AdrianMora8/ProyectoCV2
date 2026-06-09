@@ -42,36 +42,33 @@ if (!$logueado_nosotros):
 </div>
 <?php else:
     $productos = ProductoModel::obtenerTodos();
-    $total_items = 0;
-    if (!empty($_SESSION['carrito'])) {
-        foreach ($_SESSION['carrito'] as $item) {
-            $total_items += $item['cantidad'];
-        }
-    }
+
     $mensaje = $_SESSION['mensaje_carrito'] ?? '';
     unset($_SESSION['mensaje_carrito']);
     $aviso = $_SESSION['aviso_carrito'] ?? '';
     unset($_SESSION['aviso_carrito']);
+    $error_carrito = $_SESSION['error_carrito'] ?? '';
+    unset($_SESSION['error_carrito']);
+
+    $carrito = $_SESSION['carrito'] ?? [];
+    $total_carrito = 0;
+    foreach ($carrito as $item) {
+        $total_carrito += $item['precio'] * $item['cantidad'];
+    }
 ?>
+
 <?php if ($mensaje): ?>
     <div class="alert alert-success"><?= htmlspecialchars($mensaje) ?></div>
 <?php endif; ?>
 <?php if ($aviso): ?>
     <div class="alert alert-warning"><?= htmlspecialchars($aviso) ?></div>
 <?php endif; ?>
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h3 class="mb-0">Tienda</h3>
-    <?php if ($es_cliente): ?>
-    <a href="index.php?option=Carrito" class="btn text-white position-relative" style="background:rgb(177,12,12);">
-        Carrito
-        <?php if ($total_items > 0): ?>
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
-                <?= $total_items ?>
-            </span>
-        <?php endif; ?>
-    </a>
-    <?php endif; ?>
-</div>
+<?php if ($error_carrito): ?>
+    <div class="alert alert-danger"><?= htmlspecialchars($error_carrito) ?></div>
+<?php endif; ?>
+
+<!-- PRODUCTOS -->
+<h3 class="mb-4">Tienda</h3>
 
 <?php if (empty($productos)): ?>
     <p class="text-muted">No hay productos disponibles.</p>
@@ -90,7 +87,6 @@ if (!$logueado_nosotros):
                     <span class="text-white">Sin imagen</span>
                 </div>
             <?php endif; ?>
-
             <div class="card-body">
                 <h5 class="card-title"><?= htmlspecialchars($p['nombre']) ?></h5>
                 <p class="card-text text-muted small"><?= htmlspecialchars($p['descripcion']) ?></p>
@@ -99,7 +95,6 @@ if (!$logueado_nosotros):
                 </p>
                 <p class="small text-secondary mb-0">Stock: <?= (int)$p['stock'] ?> unidades</p>
             </div>
-
             <?php if ($es_cliente && $p['stock'] > 0): ?>
             <div class="card-footer bg-white border-top-0">
                 <form method="post" action="action.php">
@@ -108,8 +103,7 @@ if (!$logueado_nosotros):
                     <div class="input-group input-group-sm mb-1">
                         <input type="number"
                                name="cantidad"
-                               value="1"
-                               min="1"
+                               value="1" min="1"
                                max="<?= (int)$p['stock'] ?>"
                                class="form-control input-cantidad-tienda"
                                data-precio="<?= $p['precio'] ?>">
@@ -130,6 +124,82 @@ if (!$logueado_nosotros):
     </div>
     <?php endforeach; ?>
 </div>
+<?php endif; ?>
+
+<?php if ($es_cliente): ?>
+<!-- CARRITO -->
+<hr class="my-5">
+<h3 class="mb-4">Mi Carrito</h3>
+
+<?php if (empty($carrito)): ?>
+    <div class="alert alert-info">Tu carrito está vacío.</div>
+<?php else: ?>
+<div class="table-responsive">
+    <table class="table table-bordered align-middle">
+        <thead class="text-white" style="background:rgb(177,12,12);">
+            <tr>
+                <th>Producto</th>
+                <th class="text-end">Precio unit.</th>
+                <th class="text-center">Cantidad</th>
+                <th class="text-end">Subtotal</th>
+                <th class="text-center">Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($carrito as $prod_id => $item): ?>
+            <tr data-precio="<?= $item['precio'] ?>">
+                <td><?= htmlspecialchars($item['nombre']) ?></td>
+                <td class="text-end">$<?= number_format($item['precio'], 2) ?></td>
+                <td class="text-center" style="width:150px;">
+                    <form method="post" action="action.php" class="d-flex gap-1 justify-content-center">
+                        <input type="hidden" name="accion" value="actualizar_carrito">
+                        <input type="hidden" name="producto_id" value="<?= $prod_id ?>">
+                        <input type="number" name="cantidad"
+                               value="<?= $item['cantidad'] ?>"
+                               min="1" max="99"
+                               class="form-control form-control-sm input-cantidad"
+                               style="width:65px;">
+                        <button type="submit" class="btn btn-sm btn-outline-secondary">OK</button>
+                    </form>
+                </td>
+                <td class="text-end celda-subtotal">
+                    $<?= number_format($item['precio'] * $item['cantidad'], 2) ?>
+                </td>
+                <td class="text-center">
+                    <form method="post" action="action.php">
+                        <input type="hidden" name="accion" value="eliminar_carrito">
+                        <input type="hidden" name="producto_id" value="<?= $prod_id ?>">
+                        <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+        <tfoot>
+            <tr class="table-light">
+                <td colspan="3" class="text-end fw-bold fs-5">TOTAL</td>
+                <td class="text-end fw-bold fs-5" id="total-general">
+                    $<?= number_format($total_carrito, 2) ?>
+                </td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<div class="d-flex justify-content-end mt-3">
+    <form method="post" action="action.php">
+        <input type="hidden" name="accion" value="confirmar_compra">
+        <button type="submit" class="btn text-white" style="background:rgb(177,12,12);">
+            Confirmar compra
+        </button>
+    </form>
+</div>
+<?php endif; ?>
+<?php endif; ?>
+
+<?php if (!empty($_SESSION['abrir_factura_pdf'])): unset($_SESSION['abrir_factura_pdf']); ?>
+<script>window.open('reportes/factura_pdf.php', '_blank');</script>
 <?php endif; ?>
 
 <script src="js/carrito.js"></script>

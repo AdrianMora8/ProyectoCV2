@@ -2,12 +2,12 @@
 class modeloEnlaces
 {
     private static $paginas_publicas = ['Inicio', 'Nosotros', 'Servicios', 'Contactanos'];
-    private static $paginas_auth     = ['Carrito', 'Factura'];
+    private static $paginas_auth     = [];
     private static $paginas_admin    = ['AdminProductos', 'AdminReportes'];
 
     public static function EnlacesPaginas($opcion)
     {
-        if (in_array($opcion, ['Login', 'Tienda'])) {
+        if (in_array($opcion, ['Login', 'Tienda', 'Carrito', 'Factura'])) {
             return "views/nosotros.php";
         }
 

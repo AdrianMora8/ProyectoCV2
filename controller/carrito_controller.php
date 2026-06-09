@@ -68,7 +68,7 @@ class CarritoController
             }
         }
 
-        header('Location: index.php?option=Carrito');
+        header('Location: index.php?option=Nosotros');
         exit;
     }
 
@@ -76,14 +76,14 @@ class CarritoController
     {
         $producto_id = (int)($_POST['producto_id'] ?? 0);
         unset($_SESSION['carrito'][$producto_id]);
-        header('Location: index.php?option=Carrito');
+        header('Location: index.php?option=Nosotros');
         exit;
     }
 
     public static function confirmarCompra()
     {
         if (empty($_SESSION['carrito'])) {
-            header('Location: index.php?option=Carrito');
+            header('Location: index.php?option=Nosotros');
             exit;
         }
 
@@ -120,7 +120,7 @@ class CarritoController
         if (empty($items)) {
             $_SESSION['carrito']       = [];
             $_SESSION['error_carrito'] = 'Los productos de tu carrito ya no están disponibles.';
-            header('Location: index.php?option=Carrito');
+            header('Location: index.php?option=Nosotros');
             exit;
         }
 
@@ -141,7 +141,7 @@ class CarritoController
         } catch (Throwable $e) {
             mysqli_rollback($con);
             $_SESSION['error_carrito'] = 'No se pudo completar la compra, intenta de nuevo.';
-            header('Location: index.php?option=Carrito');
+            header('Location: index.php?option=Nosotros');
             exit;
         }
 
@@ -152,7 +152,8 @@ class CarritoController
             $_SESSION['aviso_carrito'] = 'Algunos productos se ajustaron por cambios de precio o stock antes de confirmar tu compra.';
         }
 
-        header('Location: index.php?option=Factura');
+        $_SESSION['abrir_factura_pdf'] = true;
+        header('Location: index.php?option=Nosotros');
         exit;
     }
 }
